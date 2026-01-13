@@ -378,7 +378,7 @@ class VideoPlayer:
             return False
 
 
-def Vmain(driver, max_pages=100):
+def Vmain(driver, max_pages=1000):
     """
     主函数 - 连续处理多个页面
     
