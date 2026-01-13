@@ -1,6 +1,6 @@
 """
 video.py - 自动视频播放与翻页模块
-简化版：仅包含视频检测、播放和翻页功能
+包含视频检测、播放和翻页功能
 """
 
 from selenium import webdriver
@@ -248,7 +248,7 @@ class VideoPlayer:
         logger.warning("无法播放视频")
         return False
     
-    def wait_for_video_completion(self, timeout=300):
+    def wait_for_video_completion(self, timeout=2400):
         """
         等待视频播放完成（播放到50%即认为完成）
         
@@ -389,7 +389,7 @@ def Vmain(driver, max_pages=1000):
     Returns:
         int: 成功处理的页面数量
     """
-    logger.info("开始自动视频播放与翻页流程（2倍速，50%完成）")
+    logger.info("开始自动视频播放......")
     
     player = VideoPlayer(driver)
     pages_processed = 0

@@ -379,38 +379,70 @@ def handle_non_choice_question(driver):
 def main():
     printbanners()
     login()
-    choose = input("请输入你想要实现的功能(1/2)\n1.完成所有选择题作业\n2.观看所有视频\n")
-    if choose == '1':
-        while True:
-            navigate_to_task()
+    class_name = input("你想要完成的课程名称:\n(A:软件python科目\tB:软件web科目)\n请选择:")
+    if class_name == 'A':
+        print("目前python仅支持视频刷课，是否启动？(y/n)")
+        choice = input().lower()
+        if choice == 'y':
+            printVideoBanners()
+            url = input("请输入你当前所看到的进度（视频网址）:") # https://tyutr.alphacoding.cn/courses/13415/learn/60067b441b184a51608de9b4
+            print("自动观看视频开始...请不要频繁刷新或点击页面，否则程序可能失效！")
+            driver.get(url)
+            try:
+                pages_processed = Vmain(driver, max_pages=50)
+                print(f"成功处理了 {pages_processed} 个页面")
+            finally:
+                print("100s后自动关闭浏览器...")
+                time.sleep(100)
+                driver.quit()
+        elif choice == 'n':
+            print("程序结束，未启动刷课模块。")
+            driver.quit()
+        else:
+            print("无效输入，程序结束。")
+            driver.quit()           
+    elif class_name == 'B':
 
-            answer_button = locate_answer_button(driver, 0)
-            
-            if answer_button is None:
-                print("未找到任务，可能已全部完成或发生错误，程序结束。")
-                break
-            
-            answer_button.click()
+        choose = input("请输入你想要实现的功能(1/2)\n1.完成所有选择题作业\n2.观看所有视频\n")
+        if choose == '1':
+            while True:
+                navigate_to_task()
 
-            time.sleep(1)
-            
-            click_do_homework_button(driver, 0)
-            
-            complete_all_questions_smart(driver)
+                answer_button = locate_answer_button(driver, 0)
+                
+                if answer_button is None:
+                    print("未找到任务，可能已全部完成或发生错误，程序结束。")
+                    break
+                
+                answer_button.click()
 
-        print("100s后自动关闭浏览器...")
-        time.sleep(100)
-        driver.quit()
-    elif choose == '2':
-        printVideoBanners()
-        url = input("请输入你当前所看到的进度（视频网址）") # https://tyutr.alphacoding.cn/courses/13415/learn/60067b441b184a51608de9b4
-        print("自动观看视频开始...请不要频繁刷新或点击页面，否则程序可能失效！")
-        driver.get(url)
-        try:
-            pages_processed = Vmain(driver, max_pages=50)
-            print(f"成功处理了 {pages_processed} 个页面")
-        finally:
-            driver.quit()       
+                time.sleep(1)
+                
+                click_do_homework_button(driver, 0)
+                
+                complete_all_questions_smart(driver)
+
+            print("100s后自动关闭浏览器...")
+            time.sleep(100)
+            driver.quit()
+        elif choose == '2':
+            printVideoBanners()
+            url = input("请输入你当前所看到的进度（视频网址）:") # https://tyutr.alphacoding.cn/courses/13415/learn/60067b441b184a51608de9b4
+            print("自动观看视频开始...请不要频繁刷新或点击页面，否则程序可能失效！")
+            driver.get(url)
+            try:
+                pages_processed = Vmain(driver, max_pages=50)
+                print(f"成功处理了 {pages_processed} 个页面")
+            finally:
+                print("100s后自动关闭浏览器...")
+                time.sleep(100)
+                driver.quit()
+        else:
+            print("无效的功能选择，程序结束。")
+            driver.quit()
+    else:
+        print("无效的课程选择，程序结束。")
+        driver.quit()    
 
 
 if __name__ == "__main__":
