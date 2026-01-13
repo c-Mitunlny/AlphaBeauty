@@ -59,7 +59,7 @@ class VideoPlayer:
     
     def find_and_click_speed_button(self, retry_count=3):
         """
-        查找并点击2倍速按钮
+        查找并点击倍速按钮
         
         Args:
             retry_count: 重试次数
@@ -69,67 +69,34 @@ class VideoPlayer:
         """
         for attempt in range(retry_count):
             try:
-                logger.info(f"尝试查找2倍速按钮 (第{attempt+1}次尝试)")
+                logger.info(f"尝试查找倍速按钮 (第{attempt+1}次尝试)")
                 
-                # 查找倍速选择器（根据提供的HTML结构）
-                speed_selectors = [
-                    # 根据提供的HTML结构查找
-                    ".el-radio-group .el-radio-button input[value='2x']",
-                    f".el-radio-group .el-radio-button input[value='{self.target_speed}']",
-                    ".el-radio-group label.el-radio-button:nth-child(4)",  # 第四个是2x按钮
-                    "label.el-radio-button:has(input[value='2x'])",
-                    ".el-radio-button__inner:contains('2x')"
-                ]
+                # 先点击1.5倍速按钮
+                speed_1_5_selector = ".el-radio-group label.el-radio-button:nth-child(3)"
+                speed_2_selector = ".el-radio-group label.el-radio-button:nth-child(4)"
                 
-                for selector in speed_selectors:
+                # 查找并点击1.5倍速按钮
+                elements_1_5 = self.driver.find_elements(By.CSS_SELECTOR, speed_1_5_selector)
+                for element in elements_1_5:
                     try:
-                        # 先尝试通过CSS选择器查找
-                        elements = self.driver.find_elements(By.CSS_SELECTOR, selector)
-                        for element in elements:
-                            try:
-                                # 确保元素可见
-                                if element.is_displayed():
-                                    # 如果是input，找到其父级label并点击
-                                    if element.get_attribute('type') == 'radio':
-                                        label = self.driver.execute_script(
-                                            "return arguments[0].closest('label.el-radio-button');", 
-                                            element
-                                        )
-                                        if label:
-                                            label.click()
-                                            logger.info(f"成功点击2倍速按钮 (选择器: {selector})")
-                                            return True
-                                    else:
-                                        # 直接点击元素
-                                        element.click()
-                                        logger.info(f"成功点击2倍速按钮 (选择器: {selector})")
-                                        return True
-                            except StaleElementReferenceException:
-                                continue
-                    except Exception as e:
-                        logger.debug(f"选择器 {selector} 查找失败: {e}")
+                        if element.is_displayed():
+                            element.click()
+                            logger.info("成功点击1.5倍速按钮")
+                            time.sleep(0.3)  # 短暂等待
+                            break
+                    except StaleElementReferenceException:
+                        continue
                 
-                # 通过XPath查找
-                xpaths = [
-                    f"//input[@value='{self.target_speed}']",
-                    f"//label[.//span[contains(text(), '{self.target_speed}')]]",
-                    f"//label[.//span[text()='{self.target_speed}']]",
-                    f"//span[contains(@class, 'el-radio-button__inner') and text()='{self.target_speed}']"
-                ]
-                
-                for xpath in xpaths:
+                # 查找并点击2倍速按钮
+                elements_2 = self.driver.find_elements(By.CSS_SELECTOR, speed_2_selector)
+                for element in elements_2:
                     try:
-                        elements = self.driver.find_elements(By.XPATH, xpath)
-                        for element in elements:
-                            try:
-                                if element.is_displayed():
-                                    element.click()
-                                    logger.info(f"成功点击2倍速按钮 (XPath: {xpath})")
-                                    return True
-                            except StaleElementReferenceException:
-                                continue
-                    except Exception as e:
-                        logger.debug(f"XPath {xpath} 查找失败: {e}")
+                        if element.is_displayed():
+                            element.click()
+                            logger.info("成功点击2倍速按钮")
+                            return True
+                    except StaleElementReferenceException:
+                        continue
                 
                 # 如果没找到，等待一下再重试
                 if attempt < retry_count - 1:
@@ -140,7 +107,7 @@ class VideoPlayer:
                 if attempt < retry_count - 1:
                     time.sleep(2)
         
-        logger.warning(f"未找到2倍速按钮，已重试{retry_count}次")
+        logger.warning(f"未找到倍速按钮，已重试{retry_count}次")
         return False
     
     def wait_for_video_to_start(self, timeout=10):
@@ -209,9 +176,9 @@ class VideoPlayer:
                             # 视频开始后设置倍速
                             time.sleep(1)  # 短暂等待确保播放器完全加载
                             if self.find_and_click_speed_button():
-                                logger.info("成功设置2倍速")
+                                logger.info("成功设置倍速")
                             else:
-                                logger.warning("设置2倍速失败，继续播放")
+                                logger.warning("设置倍速失败，继续播放")
                         
                         return True
                 except Exception as e:
@@ -233,9 +200,9 @@ class VideoPlayer:
                             # 视频开始后设置倍速
                             time.sleep(1)  # 短暂等待确保播放器完全加载
                             if self.find_and_click_speed_button():
-                                logger.info("成功设置2倍速")
+                                logger.info("成功设置倍速")
                             else:
-                                logger.warning("设置2倍速失败，继续播放")
+                                logger.warning("设置倍速失败，继续播放")
                         
                         return True
                 except Exception as e:
