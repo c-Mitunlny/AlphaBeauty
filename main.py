@@ -379,10 +379,10 @@ def main():
     printbanners()
     login()
     class_name = input("你想要完成的课程名称:\n(A:软件python科目\tB:软件web科目)\n请选择:")
-    if class_name == 'A':
+    if class_name == 'A' or class_name == 'a':
         print("目前python仅支持视频刷课，是否启动？(y/n)")
         choice = input().lower()
-        if choice == 'y':
+        if choice == 'y' or choice == 'yes' or choice == 'Y':
             printVideoBanners()
             url = input("请输入你当前所看到的进度（视频网址）:") # https://tyutr.alphacoding.cn/courses/13415/learn/60067b441b184a51608de9b4
             print("自动观看视频开始...请不要频繁刷新或点击页面，否则程序可能失效！")
@@ -394,13 +394,13 @@ def main():
                 print("100s后自动关闭浏览器...")
                 time.sleep(100)
                 driver.quit()
-        elif choice == 'n':
+        elif choice == 'n' or choice == 'no' or choice == 'N':
             print("程序结束，未启动刷课模块。")
             driver.quit()
         else:
             print("无效输入，程序结束。")
             driver.quit()           
-    elif class_name == 'B':
+    elif class_name == 'B' or class_name == 'b':
 
         choose = input("请输入你想要实现的功能(1/2)\n1.完成所有选择题作业\n2.观看所有视频\n")
         if choose == '1':
