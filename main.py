@@ -6,12 +6,13 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from page_element_explorer import *
 from choice_question_handler import *
+from video import *
 
 # 设置浏览器驱动
 driver = webdriver.Chrome()
 def printbanners():
     print(r"""
-          Welcome to use Mitunlny's Alpha Homework Helper - AlphaBeauty v1.0
+            Welcome to use MiTu's Alpha Homework Helper - AlphaBeauty v2.0
           ==================================================================
               ___  _       _            ______                  _         
              / _ \| |     | |           | ___ \                | |        
@@ -23,10 +24,26 @@ def printbanners():
                     |_|                                             |___/        
           ==================================================================
                    Everything will be fine! Believe in yourself!
-                       目前仅支持选择题，遇到非选择题会寄掉....
           """)
 
-
+def printVideoBanners():
+    print(r"""
+                    欢迎使用AlphaBeauty视频自动观看模块 - V1.0
+          =================================================================
+               _   _       _               ___                  _         
+              /_\ | |_ __ | |__   __ _    / __\ ___  __ _ _   _| |_ _   _ 
+             //_\\| | '_ \| '_ \ / _` |  /__\/// _ \/ _` | | | | __| | | |
+            /  _  \ | |_) | | | | (_| | / \/  \  __/ (_| | |_| | |_| |_| |
+            \_/ \_/_| .__/|_| |_|\__,_| \_____/\___|\__,_|\__,_|\__|\__, |
+                    |_|                                             |___/ 
+                   _     _                ___ _                          
+            /\   /(_) __| | ___  ___     / _ \ | __ _ _   _  ___ _ __    
+            \ \ / / |/ _` |/ _ \/ _ \   / /_)/ |/ _` | | | |/ _ \ '__|   
+             \ V /| | (_| |  __/ (_) | / ___/| | (_| | |_| |  __/ |      
+              \_/ |_|\__,_|\___|\___/  \/    |_|\__,_|\__, |\___|_|      
+                                                      |___/    
+          =================================================================          
+          """)
 
 def login():
 # 登录函数
@@ -165,26 +182,36 @@ def complete_all_questions_smart(driver, max_attempts=3):
                         # 如果失败，停留当前题目继续尝试
                 else:
                     print("检测到非选择题页面")
-                    success = handle_non_choice_question(driver) # 这个还没写。。。
+                    success = handle_non_choice_question(driver)
                     if success:
-                        print(f"✅ 第 {question_number} 题已通过")
+                        print(f"✅ 第 {question_number} 题已跳过")
+                        # 等待一下让页面稳定
+                        time.sleep(2)
                         
-                        # 等待状态更新
-                        time.sleep(1)
+                        # 重新获取题目按钮状态，避免死循环
+                        new_question_buttons = driver.find_elements(By.CLASS_NAME, "exercise-nav-btn")
+                        current_question = None
                         
-                        # 检查是否真的通过了
-                        current_btn_class = current_question.get_attribute('class')
-                        if 'status-pass' in current_btn_class:
-                            print(f"✅ 确认第 {question_number} 题状态已更新为pass")
-                            
-                            # 自动点击下一个未完成的题目
-                            if not click_next_unfinished_question(driver, question_number):
-                                print("已经是最后一题或找不到下一题")
-                                break
-                        else:
-                            print(f"⚠️ 第 {question_number} 题状态未更新为pass，继续当前题目")
+                        for btn in new_question_buttons:
+                            btn_class = btn.get_attribute('class')
+                            if 'current' in btn_class:
+                                new_num = btn.text
+                                if new_num != question_number:
+                                    print(f"已成功切换到第 {new_num} 题")
+                                    break
+                                else:
+                                    # 如果还在同一题，手动标记它为"跳过"
+                                    print(f"⚠️ 仍在第 {question_number} 题，强制跳过...")
+                                    # 模拟按Tab键或点击下一个按钮
+                                    try:
+                                        actions = webdriver.ActionChains(driver)
+                                        actions.send_keys(Keys.TAB).perform()
+                                        time.sleep(1)
+                                    except:
+                                        pass
                     else:
-                        print(f"❌ 第 {question_number} 题处理失败")
+                        print(f"❌ 第 {question_number} 题跳过失败")
+
                 
 
                 time.sleep(0.3)
@@ -269,34 +296,122 @@ def is_choice_question_page_simple(driver, timeout=3):
         return False
 
 
-
-
+def handle_non_choice_question(driver):
+    """
+    适配原有代码的非选择题处理函数
+    遇到非选择题时，模拟点击下一个题目并更新状态
+    """
+    try:
+        print("⚠️ 检测到非选择题页面，尝试处理...")
+        
+        # 获取当前题号
+        current_num = None
+        current_btn = None
+        try:
+            question_buttons = driver.find_elements(By.CLASS_NAME, "exercise-nav-btn")
+            for btn in question_buttons:
+                if 'current' in btn.get_attribute('class'):
+                    current_num = btn.text
+                    current_btn = btn
+                    break
+        except:
+            pass
+        
+        # 记录题目信息
+        try:
+            question_text = "非选择题"
+            elements = driver.find_elements(By.CSS_SELECTOR, ".exercise-title, .question-text, .stem")
+            if elements:
+                question_text = elements[0].text[:50]
+            print(f"📝 正在跳过第 {current_num if current_num else '?'} 题: {question_text}...")
+        except:
+            print(f"📝 正在跳过第 {current_num if current_num else '?'} 题（非选择题）")
+        
+        # 关键：首先找到下一个未完成的题目
+        next_question_num = None
+        next_question_btn = None
+        
+        if current_num and current_btn:
+            # 查找下一个未完成的题目
+            try:
+                question_buttons = driver.find_elements(By.CLASS_NAME, "exercise-nav-btn")
+                found_current = False
+                for btn in question_buttons:
+                    btn_class = btn.get_attribute('class')
+                    btn_num = btn.text
+                    
+                    if found_current and 'status-pass' not in btn_class:
+                        next_question_num = btn_num
+                        next_question_btn = btn
+                        break
+                    
+                    if btn_num == current_num:
+                        found_current = True
+            except:
+                pass
+        
+        # 如果有下一个题目，点击它
+        if next_question_btn:
+            print(f"📝 跳转到第 {next_question_num} 题")
+            next_question_btn.click()
+            time.sleep(1.5)
+            return True
+        else:
+            # 如果没有下一个未完成的题目，可能已经全部完成
+            print("没有找到下一个未完成的题目")
+            
+            # 尝试点击当前按钮让它失去焦点
+            if current_btn:
+                # 先点击其他地方
+                try:
+                    driver.execute_script("arguments[0].blur();", current_btn)
+                except:
+                    pass
+            
+            # 返回False，让外层逻辑判断是否需要继续
+            return False
+        
+    except Exception as e:
+        print(f"非选择题处理时出错: {e}")
+        return True  # 出错时返回True避免卡住
 
 
 def main():
     printbanners()
     login()
+    choose = input("请输入你想要实现的功能(1/2)\n1.完成所有选择题作业\n2.观看所有视频\n")
+    if choose == '1':
+        while True:
+            navigate_to_task()
 
-    while True:
-        navigate_to_task()
+            answer_button = locate_answer_button(driver, 0)
+            
+            if answer_button is None:
+                print("未找到任务，可能已全部完成或发生错误，程序结束。")
+                break
+            
+            answer_button.click()
 
-        answer_button = locate_answer_button(driver, 0)
-        
-        if answer_button is None:
-            print("未找到任务，可能已全部完成或发生错误，程序结束。")
-            break
-        
-        answer_button.click()
+            time.sleep(1)
+            
+            click_do_homework_button(driver, 0)
+            
+            complete_all_questions_smart(driver)
 
-        time.sleep(1)
-        
-        click_do_homework_button(driver, 0)
-        
-        complete_all_questions_smart(driver)
+        print("100s后自动关闭浏览器...")
+        time.sleep(100)
+        driver.quit()
+    elif choose == '2':
+        printVideoBanners()
+        url = input("请输入你当前所看到的进度（视频网址）") # https://tyutr.alphacoding.cn/courses/13415/learn/60067b441b184a51608de9b4
+        print("自动观看视频开始...请不要频繁刷新或点击页面，否则程序可能失效！")
+        driver.get(url)
+        try:
+            pages_processed = Vmain(driver, max_pages=50)
+            print(f"成功处理了 {pages_processed} 个页面")
+        finally:
+            driver.quit()       
 
-    print("100s后自动关闭浏览器...")
-    time.sleep(100)
-    driver.quit()
 
 if __name__ == "__main__":
     main()
