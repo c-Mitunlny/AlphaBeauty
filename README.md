@@ -4,8 +4,9 @@
 
 <p align="center">
   <a href="https://github.com/c-Mitunlny/AlphaBeauty">
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAADB0lEQVR4AcVXU5RcURCc79i2bds2fmLbyW9s27aNtW3btneMSne4eMtRv1PjuVWvu/pCVN/ssKi++eG69cwO7yUEE5QE6AlK5mAu5mRuEnCkDn1wjSAnwECQMydzcwb20RsZAQaGjLlF9CKIACMhiAUojChAIarKH+oSapseRK3/oPeHUFcLEaLKER9CHSJqa3UaU9zuY4P/B+wM+oqVvm8x0ukWmlkcBwujmqIJvW4qgAZmR6ongIlbWZ3CzsCvcM2JR75SBg1dHCqNGhnyQvxIC8VCr2fobX8JH1ICYZcZA9vM6H8wT4/AKOdbnK2qCWDyXnaX8J4GVWhUKC9yFFK8TvZHlkKMkiFVKzHT/RGXrPICmLyzzTmYpYejsqEBX9CNgIbmR3At1hlaRPUFsKHYbJlyMcoKhVqFeEkOQgrSkS4vFL53bTJwI9YVZQWTbg74hD72l9GJyjTC6SYuRzuxQbUXwC3X3voMfPOSIRTR4iyMd7nLg7FP+Pd/WvAIjkVYU2dotBPArTKc7ojbSyiOhFsxoaBpu9leQGhhurYCDmKa2wMUquSCA83xeCI4EKOR+VF8Tws1noAmFsdgkRGhfQmGOd0AO1soTkTYcN0FO2ew4zUkSHO1N2E7MqF3XhJKRrIsH2ej7NHK8iTX/Dfo9zxwC8sTeJjgqZs2rEu4EuOMopEozcMCmu8bmx/DqUhb8GLU3+EqethdxAz3h3iT7M9zg24EcBm41dJkBeDIkItp5XuDmiYHMd3tIU1AueCFKIlExUiyhfpf+4mI+/ocpTtXKcX2wC/gdM/zfIpIcZaepmIBL3SyOYvFXs/BaV/q87qowQRDrdGAL20FFPUCpf0AxjjfRrQ4G+UFT1yPErx4/dBGgLCIFuT6df7vYZMZhSwiUFL9+W7lZDr2wdvkAMwggi6253ExxhHcDQ+K4Ha8GwY6XOMyVnNL9seYLanVRlM2uBzr/N5jkddzGvgql4i//1s6IWixJxQQUnRTWvSuqgPjb8uNfjAx+tHM+IdTIx/PfwKP8Ngft+xbyAAAAABJRU5ErkJggg==" alt="Logo" width="80" height="80">
+    <img src="./pic/main.png" alt="Logo" width="80" height="80">
   </a>
+
 
   <h3 align="center">AlphaBeauty</h3>
   <p align="center">
@@ -24,14 +25,15 @@
 </p>
 
 
- 本篇README.md面向使用者
+ 本篇README.md面向使用/开发者
 
 ## 目录
 
 - [上手指南](#上手指南)
   - [开发前的配置要求](#开发前的配置要求)
-  - [安装步骤](#安装步骤)
+  - [安装及运行步骤](#安装及运行步骤)
 - [文件目录说明](#文件目录说明)
+- [功能简介](#功能简介)
 - [贡献者](#贡献者)
 - [版本控制](#版本控制)
 - [作者](#作者)
@@ -84,6 +86,35 @@ AlphaBeauty
 └─  video.py
 
 ```
+
+### 功能简介
+
+以tyut的alpha为例，大学内会有两项课程，即：
+
+1. python面向对象
+2. web程序设计
+
+以web为例，需要完成的作业分为： 【课堂】和【作业】两大块，第一为许多道视频和题目的综合，第二为纯作业。
+
+Alpha针对两个模块均提供解决方案。
+
+#### 【课堂】模块：
+
+由于存在许多非选择题，和ai判题情况，本项目目前仅提供视频自动刷课解决方案，运行脚本后可以自动观看该模块内的视频，自动跳转到下一个视频，直到所有视频全部解决。
+
+解决的判定标准是根据平台的特性，视频不需要全部看完，只需要看一段时间即可结算成绩，标记为完成。本项目每个视频以总时长50%的标准为完成标准，自动开启2倍速，大大节约时间成本。
+
+#### 【作业】模块：
+
+以web为例，存在许多作业，一个作业内有很多题目，组成包含选择，判断，填空和编程。本项目解决方案仅提供选择题和判断题，遇到非选择题时，会自动提醒用户进行手动处理。
+
+其中，选择和判断题目采用轮询进行尝试解决。
+
+示例图：
+
+![](./pic/1.png)
+
+![](./pic/2.png)
 
 
 
