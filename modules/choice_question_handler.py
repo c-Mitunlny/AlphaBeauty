@@ -54,7 +54,7 @@ def handle_choice_question(driver):
                 # 提交
                 if try_submit_question(driver):
                     # 等待状态更新
-                    time.sleep(1)
+                    time.sleep(0.3)
                     
                     # 检查题目按钮状态是否变为pass
                     if check_question_passed(driver, current_question_num):
@@ -173,7 +173,7 @@ def try_submit_question(driver):
         print("已点击提交按钮")
         
         # 等待页面响应
-        time.sleep(1.5)
+        time.sleep(0.5)
         return True
         
     except Exception as e:

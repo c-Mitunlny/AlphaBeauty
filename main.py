@@ -29,7 +29,7 @@ def main():
             else:
                 print("程序结束，未启动刷课模块。")
         elif class_name.upper() == 'B':
-            choose = input("请输入你想要实现的功能(1/2)\n1.完成【作业】任务（当前仅支持选择题）\n2.完成【课堂】任务（当前仅支持看视频）\n")
+            choose = input("请输入你想要实现的功能(1/2)\n1.完成【作业】任务(脚本会按照顺序完成所有题目)\n2.完成【课堂】任务(当前仅支持看视频)\n")
             
             if choose == '1':
                 attempt_count = 0
