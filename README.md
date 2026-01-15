@@ -62,15 +62,15 @@
 git clone https://github.com/c-Mitunlny/AlphaBeauty.git
 ```
 
-2. install selenium
+2. Install dependencies
 
 ```bash
-pip install selenium
-```
-```bash
-pip install pyperclip
+cd AlphaBeauty
 ```
 
+```bash
+pip install -r "requirements.txt"
+```
 3. run main.py
 
 ```bash
