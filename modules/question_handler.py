@@ -131,7 +131,7 @@ def complete_all_questions_smart(driver, max_attempts=3):
                     # 如果是选择题失败，可能是选项都尝试过了但仍然错误
                     # 这里可以添加逻辑：跳过此题或重试
                     if question_type == QuestionTypeDetector.QUESTION_TYPE_CHOICE:
-                        print("⚠️ 选择题尝试所有选项均失败，可能题目有误，尝试跳过此题...")
+                        print("❌ 选择题尝试所有选项均失败，可能题目有误，尝试跳过此题...")
                         
                         # 尝试点击下一题按钮
                         try:

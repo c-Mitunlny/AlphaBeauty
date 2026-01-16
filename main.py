@@ -7,9 +7,16 @@ from modules.choice_question_handler import *
 from modules.video import Vmain
 import time
 
+
 def main():
     printbanners()
-    driver = webdriver.Chrome()
+    Browser = input("请选择您的默认浏览器或常用浏览器（无法启动请尝试选择不同浏览器）\nA.Edge(微软) B.Chrome(谷歌)\n输入选项：")
+    if Browser == 'A' or Browser == 'a':
+        driver = webdriver.Edge()
+    elif Browser == 'B' or Browser == 'b':
+        driver = webdriver.Chrome()
+    else:
+        print("无效的选项！")
     
     try:
         login(driver)
@@ -66,7 +73,7 @@ def main():
                         time.sleep(3)
                 
                 if attempt_count >= max_attempts:
-                    print(f"⚠️ 已达到最大尝试次数 ({max_attempts})，程序结束")            
+                    print(f"已达到最大尝试次数 ({max_attempts})，程序结束")            
                     
             elif choose == '2':
                 printVideoBanners()

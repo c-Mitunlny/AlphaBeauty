@@ -91,7 +91,7 @@ def click_do_homework_button(driver, index=0):
                         return True
                         
                     except TimeoutException:
-                        print("⚠️ 点击展开按钮后，仍然未找到做作业按钮")
+                        print("❌ 点击展开按钮后，仍然未找到做作业按钮")
                         return False
                 else:
                     print("❌ 未找到展开按钮")

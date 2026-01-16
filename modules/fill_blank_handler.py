@@ -512,7 +512,7 @@ class FillBlankHandler:
             print(f"📊 匹配情况: {len(blank_inputs)}个输入框, {len(answers)}个答案, 将填写{min_count}个")
             
             if len(blank_inputs) != len(answers):
-                print(f"⚠️ 警告: 输入框数量({len(blank_inputs)})与答案数量({len(answers)})不匹配")
+                print(f" 警告: 输入框数量({len(blank_inputs)})与答案数量({len(answers)})不匹配")
             
             # 按顺序填写答案
             for i in range(min_count):
@@ -537,9 +537,9 @@ class FillBlankHandler:
                     # 验证是否填写成功
                     input_value = input_elem.get_attribute('value') or ''
                     if input_value == answer:
-                        print(f"    ✅ 验证通过: '{input_value}'")
+                        print(f"    验证通过: '{input_value}'")
                     else:
-                        print(f"    ⚠️ 验证失败: 期望'{answer}', 实际'{input_value}'")
+                        print(f"    验证失败: 期望'{answer}', 实际'{input_value}'")
                         
                 except Exception as e:
                     print(f"    ❌ 填写第{i+1}个空失败: {e}")
@@ -578,7 +578,7 @@ class FillBlankHandler:
                         
                         # 检查是否是被禁用的按钮
                         if 'cursor-not-allowed' in button_class or 'pointer-events-none' in button_class:
-                            print("⚠️ 按钮被禁用，可能答案未填写完整")
+                            print("按钮被禁用，可能答案未填写完整")
                             # 检查输入框是否都填了
                             continue
                         
@@ -675,7 +675,7 @@ class FillBlankHandler:
                     print("✅ 题目状态已更新，提交成功")
                     return True
                 else:
-                    print("⚠️ 未检测到成功弹窗，但继续执行")
+                    print("未检测到成功弹窗，但继续执行")
                     return True
                     
         except Exception as e:
@@ -735,7 +735,7 @@ class FillBlankHandler:
             except:
                 pass
             
-            print("⚠️ 无法关闭弹窗，但继续执行")
+            print("无法关闭弹窗，但继续执行")
             return True
             
         except Exception as e:

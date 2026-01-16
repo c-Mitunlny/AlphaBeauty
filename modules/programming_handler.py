@@ -164,7 +164,7 @@ class ProgrammingHandler:
                             print("✅ 答案已成功加载")
                             return True
                         else:
-                            print("⚠️ 答案可能未加载，继续尝试")
+                            print("❌ 答案可能未加载，继续尝试")
                             time.sleep(1)
                             return True
                             
@@ -173,7 +173,7 @@ class ProgrammingHandler:
                     continue
             
             # 如果精确匹配失败，尝试更宽松的匹配
-            print("⚠️ 精确匹配失败，尝试宽松匹配...")
+            print("❌ 精确匹配失败，尝试宽松匹配...")
             
             all_buttons = driver.find_elements(By.TAG_NAME, "button")
             for button in all_buttons:
@@ -282,7 +282,7 @@ class ProgrammingHandler:
                                     pyperclip.copy(answer_text)
                                     print("📋 已将答案复制到剪贴板")
                                 except:
-                                    print("⚠️ 无法复制到剪贴板，将直接使用文本")
+                                    print("❌ 无法复制到剪贴板，将直接使用文本")
                                 
                                 return answer_text
                         except:
@@ -568,10 +568,10 @@ class ProgrammingHandler:
                                 print("✅ 成功弹窗已关闭")
                                 return True
                             else:
-                                print("⚠️ 无法关闭成功弹窗，但提交已完成")
+                                print("❌ 无法关闭成功弹窗，但提交已完成")
                                 return True
                         else:
-                            print("⚠️ 未检测到成功弹窗，可能提交失败")
+                            print("❌ 未检测到成功弹窗，可能提交失败")
                             return False
                         
                 except Exception as e:
@@ -579,7 +579,7 @@ class ProgrammingHandler:
                     continue
             
             # 如果精确匹配失败，尝试更广泛的查找
-            print("⚠️ 精确匹配失败，尝试查找所有按钮...")
+            print("❌ 精确匹配失败，尝试查找所有按钮...")
             
             all_buttons = driver.find_elements(By.TAG_NAME, "button")
             for button in all_buttons:
@@ -664,7 +664,7 @@ class ProgrammingHandler:
                 time.sleep(0.5)
                 print(f"  ⏳ 等待成功提示... ({int(time.time() - start_time)}/{timeout}s)")
             
-            print(f"⚠️ 等待成功弹窗超时 ({timeout}秒)")
+            print(f"❌ 等待成功弹窗超时 ({timeout}秒)")
             return False
             
         except Exception as e:
@@ -745,7 +745,7 @@ class ProgrammingHandler:
                 print(f"JavaScript点击失败: {e}")
             
             # 方法4: 简单等待并尝试多次点击
-            print("⚠️ 尝试多次点击关闭弹窗...")
+            print("❌ 尝试多次点击关闭弹窗...")
             for i in range(3):
                 try:
                     # 在多个位置点击
@@ -769,7 +769,7 @@ class ProgrammingHandler:
                 except:
                     pass
             
-            print("⚠️ 无法关闭弹窗，但题目已提交成功，继续执行")
+            print("❌ 无法关闭弹窗，但题目已提交成功，继续执行")
             return False
             
         except Exception as e:
@@ -786,7 +786,7 @@ class ProgrammingHandler:
             
             # 如果页面还显示"太棒了"或"检查全部通过"，说明弹窗还在
             if '太棒了' in page_text and '检查全部通过' in page_text:
-                print("⚠️ 弹窗可能还在显示")
+                print("❌ 弹窗可能还在显示")
                 return False
             
             # 或者查找特定的弹窗元素
